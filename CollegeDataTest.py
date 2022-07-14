@@ -18,6 +18,7 @@ columns=['Fed ID #','College Name', 'State', 'public/private', 'Avg Math SAT Sco
 df = pd.read_csv(file, names = columns, index_col="College Name")
 print(df.head())
 
+#Start of SAT_GRAD Linear Regression
 df_SAT_GRAD = df[["Avg Combined SAT Score", "Graduation rate"]]
 df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
 print(df_SAT_GRAD.head())
@@ -62,6 +63,49 @@ plt.show()
 # Data scatter of predicted values
 
 
+#Start of Tuition_Grad Linear Regression
+df_TvG = df[["In-state tuition", "Graduation rate"]]
+df_TvG.columns = ["Tuition", "Grad Rate"]
+print(df_TvG.head())
+
+
+#Get rid of colleges with * in either SAT or Grad Rate columns.
+df_TvG = df_TvG.apply (pd.to_numeric, errors='coerce')
+df_TvG = df_TvG.dropna()
+
+print(df_TvG.head())
+
+#Include ACT scores if school doesn't have Combined SAT Scoore
+#Normalize the data into a percentage (ie. x/36 or x/1600, -400 for SAT score)
+
+#plotting the Scatter plot to check relationship between Sal and Temp
+sns.lmplot(x ="Tuition", y ="Grad Rate", data = df_TvG, order = 2, ci = None)
+
+
+X = np.array(df_TvG['Tuition']).reshape(-1, 1)
+y = np.array(df_TvG['Grad Rate']).reshape(-1, 1)
+
+# Separating the data into independent and dependent variables
+# Converting each dataframe into a numpy array
+# since each dataframe contains only one column
+df_TvG.dropna(inplace = True)
+
+# Dropping any rows with Nan values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+# Splitting the data into training and testing data
+regr = LinearRegression()
+
+regr.fit(X_train, y_train)
+
+print(regr.score(X_test, y_test))
+
+y_pred = regr.predict(X_test)
+plt.scatter(X_test, y_test, color ='b')
+plt.plot(X_test, y_pred, color ='k')
+ 
+plt.show()
+# Data scatter of predicted values
 
 '''
 X = df["Avg Combined SAT Score"].to_numpy()
