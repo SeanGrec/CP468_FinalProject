@@ -21,14 +21,11 @@ print(df.head())
 df_SAT_GRAD = df[["Avg Combined SAT Score", "Graduation rate"]]
 df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
 print(df_SAT_GRAD.head())
+
+
 #Get rid of colleges with * in either SAT or Grad Rate columns.
 df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
 df_SAT_GRAD = df_SAT_GRAD.dropna()
-
-#If grad rate is over 100%, set it to 100%
-for x in df_SAT_GRAD.index:
-  if df_SAT_GRAD.loc[x, "Grad Rate"] > 100:
-    df_SAT_GRAD.drop(x, inplace = True)
 
 print(df_SAT_GRAD.head())
 
