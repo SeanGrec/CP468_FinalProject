@@ -24,7 +24,45 @@ print(df_SAT_GRAD.head())
 #Get rid of colleges with * in either SAT or Grad Rate columns.
 df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
 df_SAT_GRAD = df_SAT_GRAD.dropna()
+
+#If grad rate is over 100%, set it to 100%
+for x in df_SAT_GRAD.index:
+  if df_SAT_GRAD.loc[x, "Grad Rate"] > 100:
+    df_SAT_GRAD.drop(x, inplace = True)
+
 print(df_SAT_GRAD.head())
+
+#Include ACT scores if school doesn't have Combined SAT Scoore
+#Normalize the data into a percentage (ie. x/36 or x/1600, -400 for SAT score)
+
+#plotting the Scatter plot to check relationship between Sal and Temp
+sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SAT_GRAD, order = 2, ci = None)
+
+
+X = np.array(df_SAT_GRAD['SAT']).reshape(-1, 1)
+y = np.array(df_SAT_GRAD['Grad Rate']).reshape(-1, 1)
+
+# Separating the data into independent and dependent variables
+# Converting each dataframe into a numpy array
+# since each dataframe contains only one column
+df_SAT_GRAD.dropna(inplace = True)
+
+# Dropping any rows with Nan values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+# Splitting the data into training and testing data
+regr = LinearRegression()
+
+regr.fit(X_train, y_train)
+
+print(regr.score(X_test, y_test))
+
+y_pred = regr.predict(X_test)
+plt.scatter(X_test, y_test, color ='b')
+plt.plot(X_test, y_pred, color ='k')
+ 
+plt.show()
+# Data scatter of predicted values
 
 
 
@@ -33,4 +71,4 @@ X = df["Avg Combined SAT Score"].to_numpy()
 kmeans = KMeans(n_clusters=2).fit(X)
 '''
 
-print("Hello World")
+print("End")
