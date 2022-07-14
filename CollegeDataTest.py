@@ -4,6 +4,10 @@ import math
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import seaborn as sns
+from sklearn import preprocessing, svm
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 
 file = "usnews.data"
@@ -13,9 +17,20 @@ columns=['Fed ID #','College Name', 'State', 'public/private', 'Avg Math SAT Sco
 'Estimated book costs', 'Estimated personal spending', 'Pct. of faculty with Ph.D.\'s', 'Pct. of faculty with terminal degree', 'Student/faculty ratio', 'Pct.alumni who donate', 'Instructional expenditure per student', 'Graduation rate']
 df = pd.read_csv(file, names = columns, index_col="College Name")
 print(df.head())
-print(df["State"])
+
+df_SAT_GRAD = df[["Avg Combined SAT Score", "Graduation rate"]]
+df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
+print(df_SAT_GRAD.head())
+#Get rid of colleges with * in either SAT or Grad Rate columns.
+df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
+df_SAT_GRAD = df_SAT_GRAD.dropna()
+print(df_SAT_GRAD.head())
+
+
+
+'''
 X = df["Avg Combined SAT Score"].to_numpy()
 kmeans = KMeans(n_clusters=2).fit(X)
-
+'''
 
 print("Hello World")
