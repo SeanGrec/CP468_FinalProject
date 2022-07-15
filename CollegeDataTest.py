@@ -28,7 +28,7 @@ print(df_SAT_GRAD.head())
 df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
 df_SAT_GRAD = df_SAT_GRAD.dropna()
 
-print(df_SAT_GRAD.head())
+print(df_SAT_GRAD.info())
 
 #Include ACT scores if school doesn't have Combined SAT Scoore
 #Normalize the data into a percentage (ie. x/36 or x/1600, -400 for SAT score)
@@ -61,6 +61,43 @@ plt.plot(X_test, y_pred, color ='k')
  
 plt.show()
 # Data scatter of predicted values
+
+df_SAT_GRAD500 = df_SAT_GRAD[:][:200]
+   
+# Selecting the 1st 500 rows of the data
+sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SAT_GRAD500,
+                               order = 2, ci = None)
+
+df_SAT_GRAD500.fillna(method ='ffill', inplace = True)
+
+X = np.array(df_SAT_GRAD500['SAT']).reshape(-1, 1)
+y = np.array(df_SAT_GRAD500['Grad Rate']).reshape(-1, 1)
+
+df_SAT_GRAD500.dropna(inplace = True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+regr = LinearRegression()
+regr.fit(X_train, y_train)
+print(regr.score(X_test, y_test))
+
+y_pred = regr.predict(X_test)
+plt.scatter(X_test, y_test, color ='b')
+plt.plot(X_test, y_pred, color ='k')
+
+plt.show()
+
+from sklearn.metrics import mean_absolute_error,mean_squared_error
+
+mae = mean_absolute_error(y_true=y_test,y_pred=y_pred)
+#squared True returns MSE value, False returns RMSE value.
+mse = mean_squared_error(y_true=y_test,y_pred=y_pred) #default=True
+rmse = mean_squared_error(y_true=y_test,y_pred=y_pred,squared=False)
+
+print("MAE:",mae)
+print("MSE:",mse)
+print("RMSE:",rmse)
+
+#-----------------------------------------------------------
 
 
 #Start of Tuition_Grad Linear Regression
@@ -107,9 +144,5 @@ plt.plot(X_test, y_pred, color ='k')
 plt.show()
 # Data scatter of predicted values
 
-'''
-X = df["Avg Combined SAT Score"].to_numpy()
-kmeans = KMeans(n_clusters=2).fit(X)
-'''
 
-print("End")
+print("END")
