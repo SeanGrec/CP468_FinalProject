@@ -1,0 +1,5 @@
+usnewsDataNormalized.csv contains all the same data 
+as usnews.data, except with two new columns at the end.
+
+1. Average SAT scores as a percentage of total possible score
+2. Average ACT scores as a percentage of total possible score 
