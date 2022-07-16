@@ -87,6 +87,11 @@ def kmeans(file, k):
 
 # Calculates euclidian distance of given point to centroid
 def euclidianDist(point, centroid):
+    print("point")
+    print(point[1][0], point[1][1])
+    print("centroid")
+    print(centroid)
+    print(centroid[0][0], centroid[0][1])
     return math.sqrt(math.sqrt((point[1][0] - centroid[0][0])
                                ** 2 + (point[1][1] - centroid[0][1])**2))
 

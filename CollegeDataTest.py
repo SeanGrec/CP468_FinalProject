@@ -10,19 +10,25 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 
-file = "usnews.data"
+file = "usnewsDataNormalized.csv"
 columns=['Fed ID #','College Name', 'State', 'public/private', 'Avg Math SAT Score', 'Avg Verb SAT Score', 'Avg Combined SAT Score', 'Avg ACT Score', 'First quartile - Math SAT', 'Third quartile - Math SAT', 'First quartile - Verbal SAT',
 'Third quartile - Verbal SAT', 'First quartile - ACT', 'Third quartile - ACT', 'Number of applications received', 'Number of applicants accepted' , 'Number of new students enrolled',' Pct. new students from top 10%% of H.S. class', 
 'Pct. new students from top 25%% of H.S. class', 'Number of fulltime undergraduates', 'Number of parttime undergraduates', 'In-state tuition', 'Out-of-state tuition', 'Room and board costs', 'Room costs', 'Board costs', 'Additional fees',
-'Estimated book costs', 'Estimated personal spending', 'Pct. of faculty with Ph.D.\'s', 'Pct. of faculty with terminal degree', 'Student/faculty ratio', 'Pct.alumni who donate', 'Instructional expenditure per student', 'Graduation rate']
+'Estimated book costs', 'Estimated personal spending', 'Pct. of faculty with Ph.D.\'s', 'Pct. of faculty with terminal degree', 'Student/faculty ratio', 'Pct.alumni who donate', 'Instructional expenditure per student', 'Graduation rate', 'Avg SAT %%', 'Avg ACT %%']
 df = pd.read_csv(file, names = columns, index_col="College Name")
 print(df.head())
 
-#Start of SAT_GRAD Linear Regression
-df_SAT_GRAD = df[["Avg Combined SAT Score", "Graduation rate"]]
-df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
-print(df_SAT_GRAD.head())
+print(df[["Avg SAT %%", "Avg ACT %%"]])
+df["Avg SAT %%"] = df["Avg SAT %%"].apply(pd.to_numeric, errors='coerce')
+df["Avg SAT %%"].fillna(df["Avg ACT %%"], inplace=True)
+print(df[["Avg SAT %%", "Avg ACT %%"]])
 
+#Start of SAT_GRAD Linear Regression
+df_SAT_GRAD = df[["Avg SAT %%", "Graduation rate"]]
+df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
+print(df_SAT_GRAD.info())
+
+print("SAT v Grad")
 
 #Get rid of colleges with * in either SAT or Grad Rate columns.
 df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
@@ -52,7 +58,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 regr = LinearRegression()
 
 regr.fit(X_train, y_train)
-
+print("SCORE1: ")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
@@ -61,8 +67,9 @@ plt.plot(X_test, y_pred, color ='k')
  
 plt.show()
 # Data scatter of predicted values
+print("SAT 100 v Grad")
 
-df_SAT_GRAD500 = df_SAT_GRAD[:][:200]
+df_SAT_GRAD500 = df_SAT_GRAD[:][:100]
    
 # Selecting the 1st 500 rows of the data
 sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SAT_GRAD500,
@@ -78,6 +85,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 
 regr = LinearRegression()
 regr.fit(X_train, y_train)
+print("SCORE2:")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
@@ -99,7 +107,7 @@ print("RMSE:",rmse)
 
 #-----------------------------------------------------------
 
-
+print("Tuition v Grad")
 #Start of Tuition_Grad Linear Regression
 df_TvG = df[["In-state tuition", "Graduation rate"]]
 df_TvG.columns = ["Tuition", "Grad Rate"]
@@ -134,7 +142,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 regr = LinearRegression()
 
 regr.fit(X_train, y_train)
-
+print("SCORE3: ")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
