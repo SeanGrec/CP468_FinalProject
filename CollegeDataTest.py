@@ -157,10 +157,23 @@ print("KMEANS!")
 
 X = np.array(df_SAT_GRAD)
 print(df_SAT_GRAD.head())
-kmeans = KMeans(n_clusters=3)
+kmeans = KMeans(n_clusters=10)
 kmeans.fit(X)
 plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
+centers = kmeans.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
 plt.xlabel("SAT Score")
+plt.ylabel("Grad Rate")
+plt.show()
+
+X = np.array(df_TvG)
+print(df_TvG.head())
+kmeans = KMeans(n_clusters=10)
+kmeans.fit(X)
+plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
+centers = kmeans.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
+plt.xlabel("Tuition")
 plt.ylabel("Grad Rate")
 plt.show()
 
