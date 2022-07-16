@@ -18,6 +18,37 @@ columns=['Fed ID #','College Name', 'State', 'public/private', 'Avg Math SAT Sco
 df = pd.read_csv(file, names = columns, index_col="College Name")
 print(df.head())
 
+#Just SAT v Grad
+print("SAT v Grad")
+
+df_SAT_GRAD = df[['Avg SAT %%', "Graduation rate"]]
+df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
+print(df_SAT_GRAD.info())
+#Get rid of colleges with * in either SAT or Tuition columns.
+df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
+df_SAT_GRAD = df_SAT_GRAD.dropna()
+
+sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SAT_GRAD,
+                               order = 2, ci = None)
+
+X = np.array(df_SAT_GRAD['SAT']).reshape(-1, 1)
+y = np.array(df_SAT_GRAD['Grad Rate']).reshape(-1, 1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+regr = LinearRegression()
+regr.fit(X_train, y_train)
+print("SAT V Grad score:")
+print(regr.score(X_test, y_test))
+
+y_pred = regr.predict(X_test)
+plt.scatter(X_test, y_test, color ='b')
+plt.plot(X_test, y_pred, color ='k')
+
+plt.show()
+#-----------------------------------------------------------
+
+
 #Include ACT scores if school doesn't have Combined SAT Scoore
 #Normalize the data into a percentage (ie. x/36 or x/1600, -400 for SAT score)
 print(df[["Avg SAT %%", "Avg ACT %%"]])
@@ -26,25 +57,25 @@ df["Avg SAT %%"].fillna(df["Avg ACT %%"], inplace=True)
 print(df[["Avg SAT %%", "Avg ACT %%"]])
 
 #Start of SAT_Tuition Linear Regression
-df_SATvT = df[["Avg SAT %%", "In-state tuition"]]
-df_SATvT.columns = ["SAT", "Tuition"]
-print(df_SATvT.info())
+df_SATACTvT = df[["Avg SAT %%", "In-state tuition"]]
+df_SATACTvT.columns = ["SAT", "Tuition"]
+print(df_SATACTvT.info())
 
-print("SAT v Tuition")
+print("SAT/ACT v Tuition")
 
 #Get rid of colleges with * in either SAT or Tuition columns.
-df_SATvT = df_SATvT.apply (pd.to_numeric, errors='coerce')
-df_SATvT = df_SATvT.dropna()
+df_SATACTvT = df_SATACTvT.apply (pd.to_numeric, errors='coerce')
+df_SATACTvT = df_SATACTvT.dropna()
 
-print(df_SATvT.info())
+print(df_SATACTvT.info())
 
-X = np.array(df_SATvT['SAT']).reshape(-1, 1)
-y = np.array(df_SATvT['Tuition']).reshape(-1, 1)
+X = np.array(df_SATACTvT['SAT']).reshape(-1, 1)
+y = np.array(df_SATACTvT['Tuition']).reshape(-1, 1)
 
 # Separating the data into independent and dependent variables
 # Converting each dataframe into a numpy array
 # since each dataframe contains only one column
-df_SATvT.dropna(inplace = True)
+df_SATACTvT.dropna(inplace = True)
 
 # Dropping any rows with Nan values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
@@ -62,33 +93,34 @@ plt.plot(X_test, y_pred, color ='k')
  
 plt.show()
 
+#-----------------------------------------------------------
 
 
 #Start of SAT_GRAD Linear Regression
-df_SAT_GRAD = df[["Avg SAT %%", "Graduation rate"]]
-df_SAT_GRAD.columns = ["SAT", "Grad Rate"]
-print(df_SAT_GRAD.info())
+df_SATACT_GRAD = df[["Avg SAT %%", "Graduation rate"]]
+df_SATACT_GRAD.columns = ["SAT", "Grad Rate"]
+print(df_SATACT_GRAD.info())
 
-print("SAT v Grad")
+print("SAT/ACT v Grad")
 
 #Get rid of colleges with * in either SAT or Grad Rate columns.
-df_SAT_GRAD = df_SAT_GRAD.apply (pd.to_numeric, errors='coerce')
-df_SAT_GRAD = df_SAT_GRAD.dropna()
+df_SATACT_GRAD = df_SATACT_GRAD.apply (pd.to_numeric, errors='coerce')
+df_SATACT_GRAD = df_SATACT_GRAD.dropna()
 
-print(df_SAT_GRAD.info())
+print(df_SATACT_GRAD.info())
 
 
 #plotting the Scatter plot to check relationship between Sal and Temp
-sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SAT_GRAD, order = 2, ci = None)
+sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SATACT_GRAD, order = 2, ci = None)
 
 
-X = np.array(df_SAT_GRAD['SAT']).reshape(-1, 1)
-y = np.array(df_SAT_GRAD['Grad Rate']).reshape(-1, 1)
+X = np.array(df_SATACT_GRAD['SAT']).reshape(-1, 1)
+y = np.array(df_SATACT_GRAD['Grad Rate']).reshape(-1, 1)
 
 # Separating the data into independent and dependent variables
 # Converting each dataframe into a numpy array
 # since each dataframe contains only one column
-df_SAT_GRAD.dropna(inplace = True)
+df_SATACT_GRAD.dropna(inplace = True)
 
 # Dropping any rows with Nan values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
@@ -106,32 +138,7 @@ plt.plot(X_test, y_pred, color ='k')
  
 plt.show()
 # Data scatter of predicted values
-print("SAT 100 v Grad")
 
-df_SAT_GRAD500 = df_SAT_GRAD[:][:100]
-   
-# Selecting the 1st 500 rows of the data
-sns.lmplot(x ="SAT", y ="Grad Rate", data = df_SAT_GRAD500,
-                               order = 2, ci = None)
-
-df_SAT_GRAD500.fillna(method ='ffill', inplace = True)
-
-X = np.array(df_SAT_GRAD500['SAT']).reshape(-1, 1)
-y = np.array(df_SAT_GRAD500['Grad Rate']).reshape(-1, 1)
-
-df_SAT_GRAD500.dropna(inplace = True)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
-
-regr = LinearRegression()
-regr.fit(X_train, y_train)
-print("SAT100 V Grad:")
-print(regr.score(X_test, y_test))
-
-y_pred = regr.predict(X_test)
-plt.scatter(X_test, y_test, color ='b')
-plt.plot(X_test, y_pred, color ='k')
-
-plt.show()
 
 from sklearn.metrics import mean_absolute_error,mean_squared_error
 
@@ -204,8 +211,8 @@ print("RMSE:",rmse)
 #Kmeans time!
 print("KMEANS!")
 
-X = np.array(df_SATvT)
-print(df_SATvT.head())
+X = np.array(df_SATACTvT)
+print(df_SATACTvT.head())
 kmeans = KMeans(n_clusters=10)
 kmeans.fit(X)
 plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
@@ -216,8 +223,8 @@ plt.ylabel("Tuition")
 plt.show()
 
 
-X = np.array(df_SAT_GRAD)
-print(df_SAT_GRAD.head())
+X = np.array(df_SATACT_GRAD)
+print(df_SATACT_GRAD.head())
 kmeans = KMeans(n_clusters=10)
 kmeans.fit(X)
 plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
