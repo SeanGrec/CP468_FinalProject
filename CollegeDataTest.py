@@ -53,7 +53,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 regr = LinearRegression()
 
 regr.fit(X_train, y_train)
-print("SCORE0: ")
+print("SCORE - SAT v T: ")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
@@ -97,7 +97,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 regr = LinearRegression()
 
 regr.fit(X_train, y_train)
-print("SCORE1: ")
+print("SAT v Grad Score: ")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
@@ -124,7 +124,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 
 regr = LinearRegression()
 regr.fit(X_train, y_train)
-print("SCORE2:")
+print("SAT100 V Grad:")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
@@ -157,7 +157,7 @@ print(df_TvG.head())
 df_TvG = df_TvG.apply (pd.to_numeric, errors='coerce')
 df_TvG = df_TvG.dropna()
 
-print(df_TvG.head())
+print(df_TvG.info())
 
 #Include ACT scores if school doesn't have Combined SAT Scoore
 #Normalize the data into a percentage (ie. x/36 or x/1600, -400 for SAT score)
@@ -181,7 +181,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 regr = LinearRegression()
 
 regr.fit(X_train, y_train)
-print("SCORE3: ")
+print("Tuition v Grad Score: ")
 print(regr.score(X_test, y_test))
 
 y_pred = regr.predict(X_test)
@@ -189,7 +189,17 @@ plt.scatter(X_test, y_test, color ='b')
 plt.plot(X_test, y_pred, color ='k')
  
 plt.show()
+
+mae = mean_absolute_error(y_true=y_test,y_pred=y_pred)
+#squared True returns MSE value, False returns RMSE value.
+mse = mean_squared_error(y_true=y_test,y_pred=y_pred) #default=True
+rmse = mean_squared_error(y_true=y_test,y_pred=y_pred,squared=False)
+
+print("MAE:",mae)
+print("MSE:",mse)
+print("RMSE:",rmse)
 # Data scatter of predicted values
+
 
 #Kmeans time!
 print("KMEANS!")
