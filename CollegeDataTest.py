@@ -152,5 +152,13 @@ plt.plot(X_test, y_pred, color ='k')
 plt.show()
 # Data scatter of predicted values
 
+#Kmeans time!
+print("KMEANS!")
+
+X = np.array(df_TvG)
+kmeans = KMeans(n_clusters=3)
+kmeans.fit(X)
+plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
+plt.show()
 
 print("END")
