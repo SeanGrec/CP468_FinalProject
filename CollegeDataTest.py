@@ -155,10 +155,13 @@ plt.show()
 #Kmeans time!
 print("KMEANS!")
 
-X = np.array(df_TvG)
+X = np.array(df_SAT_GRAD)
+print(df_SAT_GRAD.head())
 kmeans = KMeans(n_clusters=3)
 kmeans.fit(X)
 plt.scatter(X[:,0],X[:,1], c=kmeans.labels_, cmap='rainbow')
+plt.xlabel("SAT Score")
+plt.ylabel("Grad Rate")
 plt.show()
 
 print("END")
