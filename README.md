@@ -24,3 +24,8 @@ To pip install these libraries do the following:
 To execute our code simply run the file: CollegeDataTest.py
 It will output to the console any useful info along with graphs.
 
+Performance Parameters:
+We use accuracy tests to check our regression models.
+
+About Devs:
+Nicholas and Sean are two Wilfrid Laurier University asprining software developers finish up their final years in school. Sean and Nicholas really enjoy AI and Machine Learning, and are excited to continue to learn in and outside of the classroom.
