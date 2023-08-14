@@ -2,7 +2,7 @@
  CP468 - Artificial Intelligence Final Project. Analysis of College/University Data 
 
 We analzye a dataset from a 1995 U.S. News data analysis exposition.
-Throught the use of Machine learning libaries to test relationships between certain financial and academic indactor variables as well as against success indicator variables -- graduation rate.
+Used Machine learning libaries to test relationships between certain financial and academic indactor variables as well as against success indicator variables -- graduation rate.
 There is a specifc use of Linear regression & K-means models in this code, which we found best fit to test against out regression & inference problem.
 We find that through the use of our models and analyzing the dataset that we came to the conclusion that money spent on post-secondary education is a greater indicator of success than actual academic acuity entering post-secondary education.
 
